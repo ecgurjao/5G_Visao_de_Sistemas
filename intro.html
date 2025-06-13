@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 1: Introdução &mdash; Private 5G: A Systems Approach Version 0.1-dev documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/rtd_theme_mods.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/bridge.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://www.googletagmanager.com/gtag/js?id=G-C4RNJ35K6B"></script>
+        <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-C4RNJ35K6B');
+</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Capítulo 2: Arcquitetura" href="arch.html" />
+    <link rel="prev" title="Prefácio" href="preface.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Private 5G: A Systems Approach
+          </a>
+              <div class="version">
+                Version 0.1-dev
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preface.html">Prefácio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preface.html#agradecimentos">Agradecimentos</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Capítulo 1: Introdução</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cenario-de-padronizacao">1.1 Cenário de Padronização</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rede-de-acesso">1.2 Rede de Acesso</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#servicos-gerenciados-de-nuvem">1.3 Serviços Gerenciados de Nuvem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#alem-do-5g">1.4 Além do  5G</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arch.html">Capítulo 2:  Arcquitetura</a></li>
+<li class="toctree-l1"><a class="reference internal" href="radio.html">Chapter 3:  Radio Transmission</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ran.html">Chapter 4:  Radio Access Network</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Chapter 5:  Mobile Core</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cloud.html">Chapter 6:  Managed Cloud Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">About The Book</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">About The Authors</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Private 5G: A Systems Approach</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Capítulo 1: Introdução</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/intro.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="preface.html" class="btn btn-neutral float-left" title="Prefácio" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="arch.html" class="btn btn-neutral float-right" title="Capítulo 2: Arcquitetura" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="capitulo-1-introducao">
+<h1>Capítulo 1: Introdução<a class="headerlink" href="#capitulo-1-introducao" title="Permalink to this headline"></a></h1>
+<p>As redes móveis / telemóveis, que têm 40 anos de história, a qual se paralela à história da internet, têm sofrido mudanças significativas. As duas primeiras gerações suportaram voz e logo depois texto, com 3G definindo a transição para acesso à banda larga, suportando data em taxas medidas em centenas de kilobits por segundo. Hoje, a indústria está transitando do 4G (com taxas de dados tipicamente medidos em poucos megabits por segundo) para 5G, com a promessa de um aumento de dez vezes nas taxas de dados.</p>
+<p>Porém o 5G está para muito mais do que aumento da banda larga. 5G representa uma
+rearquitetura fundamental do acesso à rede em uma maneira que influencia várias
+das principais tendências tecnológicas e coloca no caminho que possibilita muitas maiores inovações.
+Da mesm forma que o 3G definiu a transição de voz para banda larga, a promessa do
+5G é principalmente a transição do serviço de acesso único (conectividade de banda larga)
+para uma coleção mais rica de serviços e dispositivos de ponta. Espera-se que 5G forneça
+apoio/suporte para interfaces de usuários imersivos (e.g.,AR/VR), aplicações em missões
+críticas (e.g., segurança pública, veículos autônomos), e a Internet das Coisas (IoT). Pois
+os usos nesses casos vão incluir tudo de eletrodomésticos a robôs industriais a carros autônomos,
+5G vai sustentar/apoiar/suportar não só humanos acessando a Internet pelo seus celulares, mas também
+conjunto de dispositivos autônomos trabalhando juntos para um determinado fim.</p>
+<p>Há mais serviços para apoiar do que apenas melhorar a banda larga ou a latência para usuários
+individuais. Como nós veremos, é necessária uma arquitetura da rede de borda
+fundamentalmente diferente. Os requisitos para essa arquitetura são ambiciosos,
+e podem ser ilustrado por três classes de capacidades:</p>
+<ul class="simple">
+<li><p>Suportar uma <em>Internet das Coisas Massiva</em>, potencialmente incluindo dispositivos com energia ultra baixa (10+ anos de vida útil da bateria), complexidade ultra baixa (dezenas de bits por segundo), e densidade ultra alta (1 milhão de nós por quilômetro quadrado).</p></li>
+<li><p>Suportar <em>Aplicações de Missão Crítica</em>, potencialmente incluindo ultra alta disponibilidade (maior do que 99.999% ou “cinco nonos/noves”), latência ultra baixa (tão baixa como 1ms), e mobilidade extrema (até 100 km/h).</p></li>
+<li><p>Suportar <em>Banda Larga Móvel Aprimorada</em>, potencialmente incluindo taxas de dados extremas (múltiplos picos de Gbps, sportando mais de 100 Mbps) e extrema capacidade (dezenas Tbbs de taxa agregada por transferência por quilômetro quadrado)</p></li>
+</ul>
+<p>Esses objetivos certamente não vão ser atingidos do dia para a noite, mas a cada geração da rede móvel
+é uma jornada de uma década.</p>
+<p>Com base nessas melhorias quantitativas para as capacidades do acesso à rede, 5G está sendo
+visto como uma chance para construir plataformas para apoiar inovação. Enquanto que os acessso de rede
+antecessor era geralmente otimizados para serviços conhecidos (como chamadas de voz e SMS),
+a Internet tem sido um grande sucesso, em grande parte porque foi apoiada por uma gama de aplicações
+que nem haviam sido pensadas quando foi ela foi projetada. A rede 5G é desenvolvida com esse mesmo
+objetivo: englobar aplicações futuras além daquelas que nós já conhecemos atualmente. Pra conhecer exemplo
+da grande visão do 5G, veja whitepaper técnico de um dos líderes da indústria.</p>
+<div class="admonition-leitura-adicional admonition" id="reading-vision">
+<p class="admonition-title">Leitura Adicional</p>
+<p>Qualcomm Whitepaper. <a class="reference external" href="https://www.qualcomm.com/media/documents/files/whitepaper-making-5g-nr-a-reality.pdf">Making 5G NR a Reality</a>.
+December 2016.</p>
+</div>
+<p>A rede de 5G móvel, por estar na sua jornada evolucionária e não uma solução pontual, inclue
+especificações padronizadas, uma gama de escolhas de implementação, e uma longa lista de objetivos.
+Como isso deixa muito espaço para interpretação, nossa abordagem para descrever 5G está pautada
+em três princípios que se suportam mutuamente. O primeiro é aplicar uma <em>visão de sistemas</em>, isto é,
+nós explicamos a sequência das decisões de design que guiam para a solução, em vez de recorrer
+a enumerar o esmagador número de siglas ou tecnologias pontuais individuais como um <em>fato consumado</em>.
+O segundo agressivamente desgregar o sistema. Construindo como desagregado, virtualizado, e definido
+por software a rede de acesso 5G está na direção que a indústria está já tomando (por razões
+tecnicamente e empresariamente boas), porém quebrair a rede de 5G em seus componentes elementares
+é também a melhor forma de explicar como 5G funciona.</p>
+<p>O terceiro princípio é para ilustrar como o 5G pode ser realizado na prática pelo desenho
+de decisões da engenharia específicas feitas em uma implementação de código livre. Essa
+implementação aproveita as melhores práticas em construção de apps da cloud, que é um
+aspecto essencial do 5G evoluindo em uma plataforma para novos serviços. Essa implementação
+também tem como alvo empresas que estão aumentando a implementação de 5G localmente, e
+tem usado isso para ajudar a automatizar sua manufatura, varejo, e práticas de negócios,
+uma tendência que tem sido chamada de <em>Indústria 4.0</em>. Essas implementações nas empresas
+são conhecidas como <a href="#id1"><span class="problematic" id="id2">*</span></a>5G privado8, mas não há nada sobre a abordagem técnica que não possa
+ser adotada pela mais tradicional “rede móvel pública” que vem à mente quando você pensa
+sobre seu serviço de celular atualmente. A única diferença é que as implantações
+privadas estão adotando de forma mais agressiva as práticas de cloud que vão acabar
+por distinguir 5G das gerações anteriores.</p>
+<div class="admonition-leitura-adicional admonition" id="reading-industry4-0">
+<p class="admonition-title">Leitura Adicional</p>
+<p>K. Schwab. <a class="reference external" href="https://www.weforum.org/about/the-fourth-industrial-revolution-by-klaus-schwab">The Fourth Industrial Revolution</a>.
+World Economic Forum.</p>
+</div>
+<p>Isso significa que não há uma definição simples para o 5G, assim como para a internet. É um
+sistema complexo e evolutivo, limitado por um conjunto de padrões que propositalmente dão
+aos interessados vários níveis de liberdade. Nos capítulos que seguintes, deve ficar
+claro pelo contexto se estamos falando sobre os <em>padrões</em> (o que todos devem fazer para interoperar),
+<em>tendências</em> (qual a indústria aparentemente parece estar seguindo), ou as <em>escolhas de
+implementação</em> (exemplos para tornar as discussões mais concretas). Por adotar uma perspectiva
+por todo o sistema, nossa intenção é descrever 5G em uma maneira que ajude ao leitor
+a navegar por esse rico e rápido sistema em evolução.</p>
+<section id="cenario-de-padronizacao">
+<h2>1.1 Cenário de Padronização<a class="headerlink" href="#cenario-de-padronizacao" title="Permalink to this headline"></a></h2>
+<p>Como no 3G, a designação de gerações corresponde a um padrão definido pelo <em>3rd Generation Partnership
+Project (3GPP)</em>. Embora seu nome tenha “3G”, o 3GPP continua definindo padrões para 4G, 5G, e
+assim por diante, cada um correspondendo a uma sequência de lançamentos (releases) do padrão.
+Release 15 é considerado um ponto de transição entre 4G e 5G, com o Release 17 tendo sido finalizado em 2022.</p>
+<p>Além dos padrões definidos pelo 3GPP, governos nacionais estabelecem como o espectro de
+rádio é usado localmente. Diferente do Wi-Fi, para o qual há um acordo internacional
+que permite qualquer um usar um canal em 2.4 ou 5 GHz (essas são faixas não licenciadas),
+governos têm leiloada e licenciado usos exclusivos de várias faixas de frequências a provedores
+de serviço, que por sua vez vendem acesso móvel aos seus assinantes. O uso do espectro licenciado
+traz certos benefícios tanto pelo grande controle da qualidade dos serviços fornecidos,
+quanto pela imposição de custos em termos de pagamentos pela licença e na redução da
+complexidade de gerenciar o acesso ao espectro. Nos próximo capítulos vamos explorar como esses custos e
+benefícios ocorrem.</p>
+<p>Há também a banda de licença compartilhada em 3,5 GHz, chamada <em>Serviço de Banda Larga do Rádio Cidadão</em>
+(Citizens Broadband Radio Service - CBRS), disponibilizada na América do Norte para uso em sistemas
+celulares. Faixas do espectro similares são disponibilizadas em outros países. As faixas CBRS permite 3
+camadas de usuários compartilharem o mesmo espectro: o usuário primário que tem a permissão para usar a
+faixa (radar naval e estações terrestres para satélite); seguido pelos usuários prioritários que recebem
+o direito de usar em uma banda de 10MHz por três anos via leilões regionais; e finalmente o restante
+da população, que pode acessar e usar uma porção dessa faixa após verificar sua disponibilidade numa
+base de dados central dos usuários registrados CBRS, junto com esforços de padronização para ampliar
+o uso de rede celulares privadas de forma similar ao Wi-Fi. Isto é especialmente atrativo para
+empresas que desejam estabelecer um serviço <em>5G privado</em>.</p>
+<p>As faixas específicas de frequência que são licenciadas por redes de celular variam pelo mundo,
+e são complicadas pelo fato das operadoras de rede ocasionalmente suportarem simultaneamente as
+duas tecnologias legadas e a nova geração de tecnologias, cada uma delas ocupa uma faixa de
+frequências. O sumário de alto nível é a tecnologia de celular tradicional faixas de 700-2400MHz,
+com as novas alocações de espectros acontecendo a 6 GHz, e as alocações de
+ondas-milimétricas (mm Wave) abrindo sobre 24 Ghz.</p>
+<p>Enquanto a faixa de frequência específica não é diretamente relevante para entender
+5G por uma perspectiva arquitetural, ela impacta nos componentes da camada-física,
+a qual tem ramos indiretos no sistema 5G em geral. Nós identificamos e explicamos
+essas ramificações nos próximos capítulos, mantendo em mente que o espectro alocado
+de <em>forma eficiente</em> é um ponto crítico.</p>
+<p>Finalmente, além dos padrões estabelecidos no 3GPP e o conjunto de órgãos nacionais
+padronizadores e o conjunto de agências reguladoras pelo mundo, uma nova organização- chamada de <em>Open-RAN Alliance (O-RAN)</em>—
+foi recentemente estabelecida com foco em “abrir a Rede de Acesso de Rádio (RAN
+- Radio Access Network)”. Veremos especificamente o que significa e como o O-RAN
+difere do 3GPP no capítulo 4, por enquanto sua existência mostra a importância da
+dinâmica na indústria: 3GPP se tornou uma organização dominada pelos vendors,
+enquanto operadoras de rede (AT&amp;T, China Mobile sendo os membro fundadores)
+criaram a O-RAN para quebrar a hegemonia dos vendors.</p>
+</section>
+<section id="rede-de-acesso">
+<h2>1.2 Rede de Acesso<a class="headerlink" href="#rede-de-acesso" title="Permalink to this headline"></a></h2>
+<p>A rede de celular móvel é uma parte do acesso a rede que implementa na chamada i
+última milha da internet. (Outro tecnologia de comum acesso é a <em>rede óptica passiva</em> (PON),
+coloquialmente conhecida como Fibra em Casa). Esses acessos a rede móveis tem historicamente
+sido providenciados por ambos, grandes e pequenos Operadores de Rede Móveis (MNOs).
+MNOs globais como AT&amp;T comanda o acesso à rede por milhares de pontos de agregação
+presentes por todo o país como os EUA, junto/juntamente com o linha dorsal nacional
+que interconecta esses sites. Nas pequenas regiões e municípios os MNOs podem ter o
+acesso a rede com um ou dois pontos de presença, e logo conecta com o resto da Internet
+por uma “espinha dorsal” de uma grande operadora.</p>
+<figure class="align-center" id="id5">
+<span id="fig-global"></span><a class="reference internal image-reference" href="_images/Slide1.png"><img alt="_images/Slide1.png" src="_images/Slide1.png" style="width: 500px;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 1. </span><span class="caption-text">Uma rede móvel global construída primeiro agregando tráfego de
+centenas de estações base sem fio, e logo interconectando
+os pontos de agregação com a Internet.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Como ilustrado na <a class="reference internal" href="#fig-global"><span class="std std-numref">Figure 1</span></a>, as redes de acesso são fisicamente
+ancorados em milhares de pontos de agregação com uma proximidade dos usuários finais,
+cada um dos servidores em qualquer lugar com 1.000 - 100.000 inscritos, dependendo
+da densidade da população. Na prática, a implantação física dessas localizações de
+borda variam de operadora para operadora, mas um possível cenário é ancorar ambos o
+celular e as redes de acesso com fio em escritórios centrais de telecomunicação (Telco Central Offices).</p>
+<p>Historicamente, o escritório central - conhecido oficialmente como o escritório central da <em>PSTN (Rede de
+telefonia pública comutada / Public Switched Telephone Network)</em> - de acesso com fio ancorado
+(ambos telefones e banda larga), enquanto a rede de celular evoluiu independentemente pela implementação
+em paralelo de um conjunto de <em>Escritório de Telefone Móvel Comutado (MTSO)</em>. Cada MTSO serve como um
+ponto de agregação móvel para o conjunto de torres de celular em uma dada área geográfica.
+Para os nossos propósitos, a ideia importante é que tal agregação de pontos existe,
+e é razoável pensar neles como bordas definidoras de uma rede de acesso gerenciado
+por uma operadora. Para simplicidade, nós às vezes usamos o termo
+“Escritório Central” como um sinônimo por ambos os tipos de sites de borda.</p>
+<p>Finalmente, um aspecto da rede móvel que pode não ser tão óbvio pela  <a class="reference internal" href="#fig-global"><span class="std std-numref">Figure 1</span></a>
+é que ele suporta conectividade global, independente da Internet (a qual é tecnicamente
+só uma de muitas tecnologias de backbone disponíveis). Isyo é, a rede de celular suporta
+um esquema universal de endereçamento, similar em princípio (mas significativamente
+diferente em detalhes) do esquema universal de acesso baseado em IP. Esse esquema de
+endereçamento deixa possível estabelecer uma chamada de voz entre qualquer dois
+celulares, mas é claro, endereços de IP ainda entram no jogo quando tenta
+estabelecer uma conexão de dados (banda larga) de um celular ou outro
+dispositivo móvel. Entender a relação entre endereços móveis e endereços
+IP é um tópico que vamos explorar em capítulos futuros.</p>
+</section>
+<section id="servicos-gerenciados-de-nuvem">
+<h2>1.3 Serviços Gerenciados de Nuvem<a class="headerlink" href="#servicos-gerenciados-de-nuvem" title="Permalink to this headline"></a></h2>
+<p>A seção anterior apresentou uma visão centrada nas Telcos da rede celular móvel,
+que faz sentido pois as Telcos tem sido as MNOs dominantes nos últimos  40 anos.
+Mas como o 5G foca em ampliar o conjunto de serviços que suporta, e embarcar às
+plataforma que podem suportar aplicações ainda não indentadas, a rede móvel celular está
+começando a quebrar a fronteira entre a rede de acesso e a nuvem (cloud).</p>
+<aside class="sidebar">
+<p class="sidebar-title">5G, Wi-Fi, e a Questão do Espectro</p>
+<p>Redes sem fio usam a faixa do espectro que não requer licença de órgãos
+reguladores. Ao mesmo tempo, qualquer um pode acessar a mesma faixa,
+sujeitos aos limites de transmissão de potência. Como resultado, redes Wi-Fi
+compartilham o espectro com outros equipamentos como monitores de crianças,
+telefones sem fio e outros, assim a camada MAC do WiFi assume a presença de
+interferência na camada física. Rede Wi-Fi corporativas, como campus de
+universidades, e escritórios de empresa, fazem um gerenciamento mais centralizado
+da interferência usando a sobreposição dos pontos de acesso, mas o risco da
+interferência permanece e o serviço é feito via a regra do menor esforço (best-effort).</p>
+<p>Redes de acesso da telefonia celular tipicamente usar o espectro licenciado que é de
+propriedade ou tem o uso cedido por longo períodos de tempo por um custo alto. Mesmo
+a faixa do espectro que é “ligeiramente licenciada” como o CBRS oferece  mais controle
+de interferência que o  Wi-Fi. Como os sistemas celulares tem acesso exclusivo ao
+espectro em uma região, eles são designados para um cobertura em uma região ampla com
+alta eficiência espectral. Gerenciar o acesso ao espectro, como podemos ver, é um
+aspecto importante para a arquitetura 5G.</p>
+<p>Muitas das diferenças entre 5G e Wi-Fi estão no uso espectro e nas características do
+rádio. Por exemplo, sistemas celulares, como os custos associados ao uso do espectro,
+historicamente tem sido feitos por empresas que podem adquirir terras, construir e
+conectar torres, e contratar pessoal especializado. Entretanto, o surgimento do 5G e
+a disponibilidade do espectro ligeiramente licenciado está quebrando esse paradigma.</p>
+</aside>
+<p>O resto deste livro explica o que isso significa em detalhes. Como uma visão geral,
+pensando na conectividade do 5G como um serviço de cloud significa que em vez de usar
+dispositivos construídos com um propósito e práticas operacionais baseadas na telefonia
+para entregar conectividade móvel, a rede 5G é construída a partir de hardware de commodities,
+redes definidas por software, e práticas operacionais baseadas na cloud. E assim como
+com aplicativos de cloud familiares, o resultado final é um sistema que aumenta
+ambos as velocidade característica e uniformidade operacional. Essas vantagens
+estão disponíveis para o legado MNOs, porém se eles vão abraçá-los totalmente ainda
+está para ser visto, então nós não nos limitamos para stakeholders existentes ou
+modelos de negócios. Em particular, esse livro foca em como empresas podem ser
+suas próprias MNOs, ou alternativamente, adquirir conectividade 5G privada
+como um serviço de cloud gerenciado de MNOs não tradicionais.</p>
+<p>Para esse fim, <a class="reference internal" href="#fig-enterprise"><span class="std std-numref">Figure 2</span></a> retrata uma implantação
+simplificada de 5G privado que será usada no resto deste livro. Em um nível alto,
+a figura mostra uma larga faixa de empresas usando casos que podem ter uma vantagem
+da conectividade do 5G, com o plano de dados do serviço de 5G rodando no local (em
+uma borda de cloud rodando na empresa), e o plano de controle do serviço do 5G rodando
+fora do local (na cloud global). <a class="footnote-reference brackets" href="#id4" id="id3">1</a> Administradores de empresas controlam o seu
+serviço com um console de gerenciamento, da mesma maneira que eles podem fazer login
+em um console AWS, GCP ou Azure para controlar um armazenamento baseado na nuvem
+ou um serviço de computação. Finalmente, aplicativos são distribuídos tanto na borda
+quanto centralizadas na nuvem, tomando vantagem de o que é comumente referido de nuvem híbrida.</p>
+<dl class="footnote brackets">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id3">1</a></span></dt>
+<dd><p>Usamos os termos “plano de dados” e “plano de controle” de forma geral
+nesta descrição. Como veremos no Capítulo 2, a arquitetura do 5G tem
+uma estrutura mais complexa e usa terminologias diferentes.</p>
+</dd>
+</dl>
+<figure class="align-center" id="id6">
+<span id="fig-enterprise"></span><a class="reference internal image-reference" href="_images/Slide14.png"><img alt="_images/Slide14.png" src="_images/Slide14.png" style="width: 600px;" /></a>
+<figcaption>
+<p><span class="caption-number">Figure 2. </span><span class="caption-text">Implementação baseada em empres da conecitivdade 5G, rodando como um
+serviço gerenciado de nuvem.</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>Hospedando o serviço de conectividade do 5G em uma borda da nuvem está perfeitamente
+alinhado com as maiores tendências da computação em nuvem: mover elementos de uma
+nuvem do datacenter para localizações que estão próximas dos usuários finais
+e seus dispositivos. Antes de olhar como realizar o 5G em uma nuvem na borda,
+nós começamos a considerar porque nuvens de borda estão ganhando evidência.</p>
+<p>A nuvem começou como uma coleção de datacenters do tamanho de warehouse, cada
+um desses providenciava uma forma eficaz para prover energia, resfriar e operar
+um número escalável de servidores. Com o tempo, essa infraestrutura compartilhada
+diminuiu a barreira em implantar serviços escaláveis na Internet, mas hoje, tem
+um aumento da pressão para oferecer aplicativos de nuvem com baixa latência e
+alta banda larga que não podem ser efetivamente implementados em datacenters remotos.
+Realidade Aumentada (AR), Realidade Virtual (VR), Internet das Coisas (IoT), e os
+veículos autônomos são todos exemplos desse tipo de aplicação. Tais aplicações
+se beneficiam de mover pelo menos uma parte de sua funcionalidade para fora de
+um datacenter e para a borda da rede, próximo de usuários finais.</p>
+<p>A ideia de tais implantações é primeiro coletar dados operacionais sobre ativos
+e infraestrutura, sensores, feeds de vídeos e telemetria de equipamentos. Depois aplicar
+ML nesses  dados para ganhar insights, identificar padrões e prever resultados
+(e.g., quando é provável um dispositivo falhar).O passo final é processo industrial
+automático para minimizar intervenção humana e ativar operações remotas (e.g.,
+otimização de energia, máquinas quiescentes em marcha lenta). O objetivo geral
+é criar uma base de TI para continuamente melhorar operações industriais pelo/por meio de software.</p>
+<p>Mas precisamente onde essa borda é localizada <em>fisicamente</em> depende para quem você pergunta.
+Se você perguntar ao operador de rede que já é dono e opera milhares de escritórios
+centrais, pelo escritório deles vai ser a resposta óbvia. Outros podem afirmar que
+a borda é localizada na 14.000 Starbucks pelos EUA, e ainda outros ainda podem apontar
+para os 10 mil torres de celulares espalhadas pelo globo. Nossa abordagem é agnóstica em
+termos de localização, mas para manter a discussão concreta, nós usamos empresas como nossa implantação exemplar.</p>
+<p>Ao mesmo tempo em que os provedores de cloud começaram a buscar implementações de ponta,
+operadores de rede começaram a re-arquitetar o acesso à rede deles para usar um hardware comum e
+as melhores práticas em construir software escalável como os provedores de nuvem. Tal design,
+que às vezes é referido como CORD <em>(Escritório Central re-arquitetado como um data center)</em>,
+oferece suporte a ambos os acessos a rede e serviços de ponta ,localizados em uma plataforma
+de nuvem compartilhada. Essa plataforma é então replicada por centenas ou milhares de
+sites de operadores, incluindo escritórios centrais.</p>
+<p>Operadores de rede tradicionais fizeram isso porque eles queriam ter vantagem nas
+mesmas economias de escala e velocidade de recurso como os provedores de cloud.
+CORD deu a eles a arquitetura geral para trabalhar para isso, mas além disso uma
+implementação de código aberto baseado em Kubernetes serve de referência para modelar
+as suas soluções. A implementação original da CORD é o antecessor direto da plataforma
+Aether que nós usamos como referência na implementação desse livro.</p>
+<div class="admonition-leituras-adicionais admonition" id="reading-cord">
+<p class="admonition-title">Leituras Adicionais</p>
+<p>L. Peterson, <em>et al</em>. <a class="reference external" href="https://wiki.opencord.org/download/attachments/1278027/PETERSON_CORD.pdf">Central Office Re-architected as a
+Datacenter, IEEE Communications.</a>.
+IEEE Communications, October 2016.</p>
+<p>A.D. Little Report. <a class="reference external" href="https://www.adlittle.com/en/who-dares-wins">Who Dares Wins!  How Access Transformation Can
+Fast-Track Evolution of Operator Production Platforms</a>.  September 2019.</p>
+</div>
+<p>Uma conclusão importante desta discussão é que para entender como o 5G está
+sendo implementado, é útil ter um entendimento prático em como as clouds são construídas.
+Isso inclui o uso de <em>hardware comercial</em> (ambos servidores e switches bare-metal),
+<em>microserviços</em> horizontalmente escaláveis (também referido como <em>nativos da nuvem</em>),
+e <em>redes definidas por software</em> (SDN). E também ajudam ter uma apreciação em
+como o software da nuvem é desenvolvido, testado, implantado e operado,
+incluindo práticas como <em>DevOps</em> e <em>Integração e Desenvolvimento Contínuos (CI/CD)</em>.
+Nós recomendamos dois livros complementares para ajudar a preencher as lacunas
+para entender essas tecnologias fundamentais.</p>
+<div class="admonition-leituras-adicionais admonition" id="reading-devops">
+<p class="admonition-title">Leituras Adicionais</p>
+<p><a class="reference external" href="https://sdn.systemsapproach.org/">Software-Defined Networks: A Systems Approach</a>. November 2021.</p>
+<p><a class="reference external" href="https://ops.systemsapproach.org/">Edge Cloud Operations: A Systems Approach</a>. June 2022.</p>
+</div>
+</section>
+<section id="alem-do-5g">
+<h2>1.4 Além do  5G<a class="headerlink" href="#alem-do-5g" title="Permalink to this headline"></a></h2>
+<p>Quando as MNOs começaram a disponibilizar o 5G em 2019, as pessoas começaram
+a falar sobre o que vem em seguida. A resposta óbvia é 6G, mas não está
+totalmente claro quais gerações dos últimos 40 anos irão continuar no futuro.
+Hoje, você pode escutar alternativas como “NextG” e “além do 5G” mais comumente
+do que 6G, que pode ser um sinal que a indústria está fazendo uma mudança fundamental.
+E não há argumento que nós estamos no meio de um mar de mudanças que irão
+produzir uma distinção de gerações tão clara.  Há duas razões complementares
+para isto, ambas estão fundamentadas no que há de importante em redes 5G Privadas.</p>
+<p>O primeiro fator é que pela adoção tecnologia de cloud, a rede celular deseja
+obter a promessa da alta velocidade. Esta história da “agilidade” sempre
+foi incluída nos primeiros materiais de promoção do 5G, como o motivador
+para que o upgrade promovido pelo 5G seja um investimento que valha a pena,
+mas a consequência dessas tecnologias se tornarem uma tendência é que novas
+funcionalidades podem ser continuamente rapidamente introduzidas e desenvolvidas.
+Em algum ponto, a frequência das melhorias contínua geral é uma distinção entre gerações que é irrelevante.</p>
+<p>O segundo é que agilidade não é somente pressa, mas também customização. Isto é,
+essas mudanças podem ser introduzidas da base para o topo (bottom-up) — por exemplo
+pelas empresas e seus parceiros na nuvem no caso das redes 5G Privadas —
+sem necessariamente depender de (ou esperar por) um esforço de padronização global.
+Se uma empresa encontra um novo caso de uso que requer adotar um desenvolvimento
+específico, comente sua rede 5G Privada precisa adotar essas mudanças.
+Obter a concordância de todos os parceiros não será mais um requisito.</p>
+<p>Pode-se dar um palpite aonde isso vai nos levar, mas será interessante ver
+como esta dinâmica impacta na padronização: que aspectos da rede móvel
+requer uma concordância global e quais aspectos não precisam pois eles
+podem envolver casos específicos. Enquanto padrões normalmente estimulam
+inovação (TCP e HTTP são doi grandes exemplos da experiência com a Internet),
+algumas vezes padrões servem como uma barreira para competição, e portanto,
+para inovação. Agora que o software está em todas as partes da rede celular
+- com as redes 5G Privadas nas empresas provavelmente dando o ritmo - vamos aprender o que os padrões fazem.</p>
+<p>Em resumo, que o 5G é um caminho de evolução é o tema principal deste livro.
+Chamamos atenção para sua importância, e revisitarmos o tópico no livro.
+Escrevemos esse livro para pessoas com visão sistêmica (system generalists),
+com o objetivo de ajudar a comunidade a entender uma grande parte dos problemas
+do sistema (mas que pouco ou nada sobre sobre uma rede celular) até acelerar ao
+ponto que elas possam atuar nesta evolução. Esta é uma comunidade que entende
+ambos a característica da velocidade e melhores práticas em construir um
+sistema escalável, e tem um papel importante a desempenhar em tornar todo
+o potencial do 5G em produtos.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="preface.html" class="btn btn-neutral float-left" title="Prefácio" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="arch.html" class="btn btn-neutral float-right" title="Capítulo 2: Arcquitetura" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Systems Approach LLC (Publisher).</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
