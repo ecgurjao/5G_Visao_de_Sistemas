@@ -1,0 +1,673 @@
+Capítulo 2:  Arquitetura
+=========================
+
+.. The general plan is for the sections in this chapter to introduce
+   each of the chapters that follow. It introduces high-level concepts
+   and terminology, but does not go into implementation details.  The
+   main takeaways should be an understanding of the main concepts
+   (e.g., support for mobility, slicing/QoS, security/authentication,
+   identity/addresses), but without saying too much about how they are
+   realized.
+
+   Ideally, this chapter doubles as a Requirements discussion. We need
+   to make a pass that emphasizes that perspective.
+
+   The last section needs to accomplish two things. One is to explain
+   that we have several degrees of freedom in how the individual
+   components are deployed/distributed, but then zero in on the
+   enterprise and private deployments. The second is to explain that
+   the system as a whole has to be managed and operated, but then zero
+   in on best practices in cloud-based managed services.
+
+Este capítulo identifica os principais componentes arquiteturais de 
+rede móvel celular. Para tanto, nós precisamos introduzir alguma 
+terminologia, que pode ser confusa para aqueles cuja base vem da Internet. 
+Isto se deve parcialmente porque algo que precisa acontecer em uma 
+rede móvel, como acompanhar que estação base está servindo um 
+determinado equipamento móvel, não tem um paralelo em redes fixas. 
+Além disso, a terminologia vem do processo de padronização do 3GPP, 
+que é historicamente concebido para telefonia e completamente 
+desconectada do IETF e outros esforços relacionados à Internet. 
+Para aumentar a confusão, a terminologia do 3GPP normalmente muda em 
+cada geração (por exemplo, uma estação base é denominada de eNB 
+no 4G e gNB no 5G). Nós contornamos essas situações usando a 
+terminologia genérica (por exemplo estação base), e referenciando 
+a forma específica do 3GPP somente quando a distinção ajudar. 
+Este exemplo é somente uma dica do iceberg da terminologia. 
+O blog de Marcin Dryjanski fornece uma perspectiva ampla da complexidade da terminologia no 5G.
+   
+
+.. _reading_terminology:
+.. admonition:: Leitura Adicional
+		
+   Marcin Dryjanski. `LTE and 5G Differences: System Complexity
+   <https://www.grandmetric.com/blog/2018/07/14/lte-and-5g-differences-system-complexity/>`__.
+   July 2018.
+
+2.1 Visão Geral
+---------------
+
+A rede móvel celular provê conectividade para equipamentos que (potencialmente) 
+se movem. Estes equipamentos, que são denominados de *Equipamentos do Usuário* 
+(User Equipment - UE), tradicionalmente correspondem a telefones e tablets, 
+mas tem incluído cada vez mais carros, drones, máquinas industriais e da 
+agricultura, robôs, eletrodomésticos, equipamentos médicos, e outros. 
+Em alguns casos, os UE podem ser equipamentos que não se movem, por exemplo, 
+interfaces de roteadores usando a tecnologia celular para prover acesso banda larga a localidades remotas.
+
+
+.. _fig-cellular:
+.. figure:: figures/Slide2.png 
+    :width: 600px
+    :align: center
+	    
+    Redes móveis celulares consistem de uma rede de acesso via rádio (Radio Access Network - RAN) 
+    e um Core Móvel.
+
+Como mostrado na :numref:`Figure %s <fig-cellular>`, a rede móvel celular 
+consiste primordialmente de dois subsistemas: a *rede de acesso via rádio* 
+(Radio Access Network - RAN) e o *Core Móvel* (Mobile Core). A RAN gerencia 
+o espectro de frequências, garantindo que ele seja usado de forma eficiente 
+e atenda os requisitos de qualidade de serviço da cada usuário. Ela corresponde 
+a uma coleção de estações base distribuídas. Como notado antes, elas são 
+denominadas de eNodeB ou eNB (forma curta para *evolved Node B*) no 4G. 
+No 5G, estações base são denominadas de gNB, sendo que “g” está relacionada com a 
+*próxima geração*.
+
+O Core tem um conjunto de funcionalidades (normalmente empacotados em 
+um ou mais equipamentos) que servem para vários propósitos.
+
+- Autenticar equipamentos antes de conectá-los a rede.
+- Prover conectividade (IP) para o serviços de voz e dados.
+- Garantir que essa conectividade atende os requisitos de QoS prometidos.
+- Acompanhar a mobilidade para garantir a continuidade do serviço.
+- Acompanhar os assinantes para tarifação.
+
+Para leitores familiares com a arquitetura de Internet e o Wi-Fi como uma 
+tecnologia de acesso, algumas dessas funções parecem surpreendentes. 
+Por exemplo, Wi-Fi, como muito da Internet, normalmente provê um serviço de 
+melhor esforço, enquanto as redes celulares procuram entregar alguma garantia de QoS. 
+Acompanhar os assinantes para mobilidades e tarifação são outras funcionalidades 
+que não pensamos quando se trata de Internet, mas são consideradas funções 
+importantes em redes celulares. As razões para essas diferenças são muitas,
+incluindo o alto curso de aquisição do espectro em manutenção da infraestrutura como 
+às torres de rádio. Com este grande investimento, vem o desejo de recuperar os gastos 
+pela cobrança aos assinantes, que por sua vez implica em incluir algum tipo de garantia 
+do serviço a esses assinantes para justificar o custo. Também existe a necessidade de 
+maximizar a eficiência no uso do espectro. Muito da complexidade do Core vem desses 
+requisitos impostos pelos provedores de serviço. Mesmo nas redes 5G privadas, 
+existe a necessidade de gerenciar o uso do espectro para obter os benefícios 
+do 5G sobre o Wi-Fi, tais como o controle sobre a latência e largura de banda.
+
+Note que Core Móvel (Mobile Core) é outro exemplo de um termo genérico. No 4G 
+ele era denominado de *Evolved Packet Core (EPC)* e no 5G de  *Next Generation Core (NG-Core)*. 
+Entretanto, embora que a palavra “Core” esteja no nome, o Mobile Core ele roda 
+na borda da rede, provendo uma ponte entre a RAN em uma área e um rede baseada 
+em IP co m acesso a Internet. O 3GPP prevê uma flexibilidade sisgnificante em 
+como o Mobile Core está geograficamente instaldo, indo desde instalações mínimas 
+(a RAN e o mobile core na mesma localização) até áreas com milhares de quilômetros. 
+Um modelo comum é que uma instância do Mobile Core serve uma área metropolitana. 
+A RAN correspondente pode variar de várias dezenas (ou mesmo centenas) de 
+torres em uma determinada área geográfica.
+
+Observando a :numref:`Figure %s <fig-cellular>`  mais de perto, vemos que uma rede 
+Backhaul interconecta às estações base que implementam a RAN com Mobile Core. Esta 
+rede é tipicamente cabeada, podendo ter ou não a topologia em anel mostrada na figura, 
+e é normalmente construída como componentes comerciais encontrados na Internet. 
+Por exemplo, a rede óptica passiva (Passive Optical Network - PON) que implementa 
+a Fibra-em -casa (Fiber-to-the-Home) é um candidato para implementar o backhaul 
+da RAN, com a RAN efetivamente rodando no topo de qualquer tecnologia utilizada.  
+Ethernet chaveada, como pode-se encontrar numa empresa, é outra escolha que faz sentido. 
+A rede backhaul é obviamente uma parte necessária da RAN, mas é uma escolha de 
+implementação e não está prescrita nos padrões 3GPP.
+
+Apesar do 3GPP especificar todos os elementos que compõem a RAN e o Mobile Core 
+em um padrão aberto - incluindo sub-camadas que ainda não apresentamos - operadores 
+de rede têm historicamente comprado implementações proprietárias de cada subsistema 
+de um único vendedor. Esta falta de implementação open-source contribui para a 
+“opacidade” da rede celular em geral, e da RAN em particular. E mesmo sendo verdade 
+que as estações base contenham algoritmos sofisticados para o gerenciamento da 
+transmissão no espectro de rádio - algoritmos que são considerados com propriedade 
+intelectual valiosa do equipamentos de fabricantes - existe uma oportunidade 
+significativa para o desenvolvimento aberto e desagregado da RAN e do Core. 
+Este livro traz uma receita de como fazer isso. 
+
+Antes de entrar nesses detalhes, temos mais conceitos arquiteturais para introduzir. 
+Primeiro, a :numref:`Figure %s <fig-cups>` redesenha os componentes da :numref:`Figure %s <fig-cellular>`
+para destacar que a estação 
+base tem um componente analógico (descrito por uma antena) e um componente digital 
+(descrito por um par de processadores). Este livro tem foco no segundo, 
+mas nós introduzimos informação suficiente sobre a transmissão de rádio 
+pelo ar para fornecer uma ideia do seu impacto na arquitetura em geral.
+
+
+.. _fig-cups:
+.. figure:: figures/Slide3.png 
+    :width: 400px
+    :align: center
+
+    Divisão do Core em Plano de Controle (Control Plane) e Plano de 
+    Usuário (Control Plane), uma característica arquitetural denominada de 
+    CUPS: Control and User Plane Separation.    
+
+O segundo conceito, também descrito na :numref:`Figure %s <fig-cups>`, 
+é particionar o Core em *Plano de Controle* (Control Plane) e *Plano de Usuário* (User Plane). 
+Isto é similar a divisão de controle/dados que quem está familiarizado 
+com a Internet pode reconhecer, e em particular com as ideias das 
+redes definidas por software (software-defined networking - SDN) pela 
+colocação dos planos de controle e usuário em equipamentos separados. 
+3GPP introduziu um acrônimo -\ *CUPS, Control and User Plane Separation*— para 
+denotar essa ideia. Uma motivação para o CUPS é habilitar os recursos do plano 
+de controle e do plano de dados para que escalem de forma independente um do outro.
+
+Finalmente, uma dos objetivos que o 5G aspira é a habilidade de separar tráfego 
+de diferentes domínios em *fatias (slices) de rede*, cada um entregando um nível 
+de serviço diferente a uma coleção de equipamentos e aplicações. Pensando 
+num fatiamento da rede como um versão sem fio de uma rede virtual é uma boa 
+aproximação, apesar de que como veremos nos capítulos seguintes, os detalhes da implementação diferem.
+
+
+.. _fig-slice:
+.. figure:: figures/Slide4.png 
+    :width: 500px
+    :align: center
+    
+    Diferentes domínios de uso (e.g., IoT e streaming de vídeos) instanciar 
+    *fatias de rede* distintas para conectar um conjunto de dispositivos 
+    com uma ou mais aplicações.
+
+Por exemplo, a :numref:`Figure %s <fig-slice>` mostra duas fatias, uma que 
+suporta a carga de trabalho do IoT (Internet das Coisas) e os outros suportando 
+tráfego de streaming multimídia. Como nós veremos pelo livro, uma questão importante 
+é como o fatiamento é realizado de ponta a ponta, pelo rádio, a RAN, e o núcleo móvel. 
+Isso é feito por meio de uma combinação de alocação de distintos recursos para cada 
+fatia e agendamento de recursos compartilhados na ordem de um conjunto de fatias.
+
+
+2.2 Transmissão de Rádio
+------------------------
+
+.. Establish the distinction between the over-the-air interface and
+   the RAN, and introduce the minimum terminology needed in the rest
+   of this chapter (most notably, the opportunity to differential
+   quality-of-service). Could draw parallel to optical link. The radio
+   transmission chapter is already a minimal primer, so this section
+   will likely be pretty short.
+
+Antes de descrever os subsistemas da RAN e do Core, nós primeiro chamamos 
+atenção para o óbvio: que as estações bases que compõem a RAN se comunicam 
+com UEs por meio de ondas eletromagnéticas. Esse livro não é sobre a física 
+dessa comunicação sobre o ar, e somente passa levemente sobre a superfície 
+da Teoria da Informação que fundamenta isso. Mas identificar as propriedades 
+abstratas da comunicação sem fio é fundamental para entender o restante da arquitetura do 5G.
+
+
+Se você imagina as estações base como implementando uma pilha de protocolo multi-camada 
+(a qual, nós vamos ver no capítulo 4, eles fazem), então a transmissão de rádio é 
+de responsabilidade da camada mais inferiores dessa pilha, onde (a) uma conversão 
+digital-analógico acontece, e (b) ondas de rádio analógicas são transmitidas/recebidas. 
+Capítulo 3 introduz a transmissão de rádio com especificidade suficiente para 
+estabelecer as bases necessárias, para então sermos capazes de entender todas as camadas que vem acima.
+
+
+Para os propósitos deste capítulo, nós só precisamos entender o seguinte. Primeiro, a RAN é 
+responsável por gerenciar como o espectro do rádio é compartilhado por milhares de UEs 
+conectados em centenas de estações bases em uma região. O primeiro objetivo do Capítulo 3 
+é estabelecer uma interface abstrata a qual a RAN pode gerenciar o espectro sem ter que 
+se preocupar com os detalhes da forma da onda, modulação, ou código dos algoritmos 
+de codificação. Todos tópicos importantes, com certeza, mas no domínio de teorias 
+da informação em vez de projeto de sistema que é o foco deste livro.
+
+
+.. _fig-quality:
+.. figure:: figures/Slide5.png 
+    :width: 300px
+    :align: center
+    
+    Abstratamente, medidas de qualidade de sinal (CQI) e declarações 
+    de dados pretendidos entregam qualidade (QCI) são passados para cima 
+    e para baixo na pilha RAN.
+
+Segundo, tem duas importantes peças de informação compartilhadas entre 
+camadas superiores da pilha de protocolo das estações base que gerencia 
+a RAN como um todo, e as camas mais inferiores da pilha que gerenciam 
+as transmissões de rádio em uma estação base particular. Uma é a relação 
+sinal ruído que a estação base observou quando se comunicava com cada UE.
+Isso é chamado o *indicador de qualidade do canal (Channel Quality Indicator - CQI)* 
+e é passado do/ transmitido pelo rádio. O outro é a qualidade do serviço 
+que a rede quer dar a uma UE particular. Isso é chamado *indicador de classe 
+de QoS (QoS Class Indicator - QCI)* e é passado  para o rádio. Esse resumo abstrato, 
+como mostrado na :numref:`Figure %s <fig-quality>`, é suficiente para introduzir a RAN e o núcleo móvel. 
+Forneceremos mais detalhes sobre ambos esses parâmetros no Capítulo 3.
+
+
+.. sidebar:: Singularidade de um Enlace sem Fio
+
+   Enquanto é comum na rede abstrair a camada do link por tratar o link 
+   como algo que só entregam pacotes em alguma taxa de um ponto A para 
+   o ponto B, tem diferenças importantes entre links sem fio e link fixos 
+   que não podem ser abstraídos inteiramente nas camadas superiores. 
+   Isso é especialmente verdade quando dispositivos móveis estão envolvidos, 
+   como a qualidade de um link vai variar dependendo da distância entre o 
+   transmissor e o receptor, a velocidade relativa dos pontos de finais, 
+   reflexões das ondas de rádio por outros objetos, e interferência de outros 
+   transmissores. Todos esses fatores entram para determinar o indicador de qualidade do canal 
+   (Channel Quality Indicator - CQI).
+   
+   Outra complicação do cenário de uma rede móvel é quando uma UE está ao 
+   alcance de uma mais estações rádio base, apresentando a opção de fazer 
+   handover de uma estação base para outra. A decisão não leva em conta 
+   somente em utilizar a estação base com a melhor qualidade do canal, 
+   mas a otimização de todo o sistema, que tem como objetivo suportar 
+   tantas UEs quanto possível a um nível de qualidade desejável dada a 
+   disponibilidade de espectro e cobertura.
+   
+
+..   Talk about quality of the "link" being continuous in a wireless
+..   network, versus discrete in a wireline network (the link is up or
+     it is down). Quality plays a role in handover, but it's more
+     complicated than "picking the best." You have to play the value
+     delivered to a given UE against the aggregate goodness of the
+     shared spectrum.
+
+Finalmente, como o resto da rede de celular móvel, o rádio vem com um conjunto de 
+acrónimos/siglas, com *LTE (Long-Term Evolution)* e *NR (Novo Rádio)* sendo os 
+dois mais conhecidos. Esses são termos de marketing comumente associados com 
+a tecnologia de rádio para o 4G e 5G, respectivamente. Eles são importantes 
+só no sentido que muitos dos novos recursos prometidos pelo 5G podem ser 
+diretamente atribuídos à melhorias na tecnologia de rádio subjacente. 
+Para os nossos propósitos, a chave é o conjunto de novos casos de  usos a 
+melhora da tecnologia de rádio permite, e porque. Nós introduzimos essas 
+melhorias no rádio no Capítulo 3, e relacionamos esses com os casos que 
+eles permitem. Capítulos subsequentes vão então explicar como a RAN 
+e o núcleo móvel precisam evoluir para então aproveitar seu potencial.
+
+
+2.3 Rede de Acesso de Rádio
+---------------------------
+
+Vamos agora descrever a RAN pela descrição do papel que cada estação 
+base tem. Entenda que isso é como descrever o funcionamento da 
+Internet usando a explicação de como um roteador funciona - não é um modo 
+ruim de começar, mas não é justo ao final da história. 
+
+
+Primeiro, cada estação base estabelece um canal sem fio para o UE 
+assinante quando ele inicia ou quando uma UE ativa está em handover. 
+Este canal é liberado quando a UE fica sem atividades por um período de 
+tempo predeterminado. Usando a terminologia do 3GPP, este canal é dito  
+prover um serviço ao portador (*bearer service*). O termo portador (“bearer”) 
+tem sido historicamente usado em telecomunicações (incluindo às 
+tecnologias com fio como o ISDN) para denotar um canal de dados, 
+em oposição ao canal que transporta informação de sinalização.
+
+
+.. _fig-active-ue:
+.. figure:: figures/Slide6.png 
+    :width: 500px
+    :align: center
+
+    Estação base detecta (e se conecta) a um UE ativo.
+
+Segundo, cada estação base estabelece uma conexão  “3GPP Plano de Controle” 
+entre a UE e o plano de controle do componente do Core, e encaminha o tráfego 
+de sinalização entre os dois. Esta sinalização habilita a autenticação, 
+registro e acompanhamento da mobilidade do UE. 
+
+
+.. _fig-control-plane:
+.. figure:: figures/Slide7.png 
+    :width: 500px
+    :align: center
+	    
+    A Estação Base estabelece a conectividade do plano de controle entre o UE o Core.
+
+Terceiro, para cada UE ativa, a estação base estabelece um ou mais túneis para o 
+componente do Plano do Usuário do Core correspondente. :numref:`Figure %s <fig-user-plane>`
+mostra dois (um para voz e outro parada dados), e enquanto na prática 4G está 
+limitado a somente dois, 5G tem a intenção de suportar muitos outros túneis 
+como parte de um mecanismo generalizado de fatiamento da rede.
+
+
+.. _fig-user-plane:
+.. figure:: figures/Slide8.png 
+    :width: 500px
+    :align: center
+	    
+    A Estação Base estabelece um ou mais túneis entre cada UE e o plano de Usuário do Core.
+
+Quarto, cada estação base encaminha pacotes dos planos de controle e de 
+usuário entre o Core e o UE. Esses pacotes seguem pelo túnel sobre SCTP/IP 
+e GTP/UDP/IP, respectivamente. SCTP (Stream Control Transport Protocol) 
+é uma alternativa confiável para transporte sobre TCP, desenhado para 
+transportar informação de sinalização (controle) no serviço de telefonia. 
+GTP (um acrônimo para (General Packet Radio Service) Tunneling Protocol) 
+é um protocolo de tunelamento específico do 3GPP projeto para rodar sobre UDP. 
+
+É importante observarmos que a comunicação entre a RAN e o Core é baseada em IP. 
+Esta foi uma das maiores mudanças entre o 3G e o 4G. Antes do 4G, as conexões 
+internas da rede celular eram baseadas em circuitos, o que não é surpresa 
+devido a sua origem na rede de voz. Isto também ajuda a explicar porque 
+na Seção 2.1 nós categorizamos o Backhaul da RAN como uma sobreposição 
+rodando no topo de alguma tecnologia da camada 2.
+
+
+.. _fig-tunnels:
+.. figure:: figures/Slide9.png 
+    :width: 500px
+    :align: center
+	    
+    Estação base para núcleo móvel (e estação base para estação base) plano 
+    de controle encapsulado em SCTP/IP e plano de usuário encapsulado em GTP/UDP/IP.
+
+Quinto, cada estação base coordena handovers de UE com as estações base 
+vizinhas, usando links diretos entre as estações. Exatamente como na 
+conectividade estação-core mostrado na figura anterior, estes links são 
+usados para transferir pacotes do plano de controle (SCTP sobre IP) 
+e plano do usuário (GTP sobre UDP/IP). A decisão de quando fazer o 
+handover é baseado nos valores de CQI reportados pelo rádio em cada estação 
+base no alcance do UE, junto com o valor do QCI que às estações base sabem que foi prometido pela RAN.
+
+
+.. _fig-handover:
+.. figure:: figures/Slide10.png 
+    :width: 500px
+    :align: center
+	    
+    Estações bases cooperam para implementar o hand over da UE.
+
+Sexto, as estações bases coordenam transmissões multipontos sem fio para a UE por múltiplas 
+estações bases, as quais podem ou não fazer parte da entrega dos UE de uma estação base para outra.
+    
+
+.. _fig-link-aggregation:
+.. figure:: figures/Slide11.png 
+    :width: 500px
+    :align: center
+
+    Estações Base cooperam para implementar a transmissão por múltiplos 
+    percursos (agregação de enlaces) para os UEs.	    
+
+Uma observação é que a estação base pode ser vista como um encaminhador especializado. 
+Na direção da Internet para o UE, ele fragmenta pacote IP em segmentos da camada física 
+os agenda para transmissão no espectro de rádio disponível, e na direção do UE para a 
+Internet ela junta segments da camada física em pacotes IP e os encaminha 
+(sobre um túnel GTP/UDP/IP) para o plano de usuário do Core. Também, baseado na qualidade 
+do canal sem fio e das políticas por assinante, ela decide quando (a) encaminhar 
+pacotes de saída diretamente para o UE, (b) encaminhar indiretamente os pacotes 
+para o UE via estações base próximas, ou © utilizar múltiplos caminhos para 
+alcançar o UE. O terceiro caso tem a opção de ou espalhar os pacotes por 
+múltiplas estações base ou por múltiplas frequências de uma única estação base (incluindo o Wi-Fi).
+
+Em outras palavras, o RAN como um todo (i.e., não apenas uma única estação base) não só 
+suporta transferências (um requisito óbvio para mobilidade), mas também *agregação de 
+link* e *balanceamento de carga*, mecanismos que são similares a aqueles achados em 
+outros tipos de rede. Essas funções implicam um processo global de tomada de decisões, 
+na qual é possível encaminhar o tráfego para uma estação base diferente (ou para 
+múltiplas estações base) em um esforço para fazer uso eficiente do espectro de rádio 
+sobre uma área geográfica maior. Nós ainda vamos revisitar como o RAN-wide (global) 
+decisões pode ser feito usando técnicas SDN no Capítulo 4.
+
+
+2.4 Core Móvel
+---------------
+
+No nível mais básico, a função do núcleo móvel é em prover conectividade a rede de pacotes de 
+dados para assinantes móveis i.e., conecta-los a Internet. (A rede móvel assume que múltiplas 
+redes de pacotes de dados podem existir, mas na prática a Internet é a que importa). 
+Como nós observamos acima, há mais para prover essa conectividade do que aparenta: 
+o núcleo móvel garante que os assinantes sejam autenticados e visa entregar a qualidade 
+do serviço para a qual eles se assinaram. Como os assinantes podem se mover entre as 
+áreas cobertas pelas estações base, o núcleo móvel precisa acompanhar a localização 
+deles na estação base que está servindo. As razões desse rastreamento serão discutidas 
+futuramente no Capítulo 5. É esse suporte para segurança, mobilidade, e QoS 
+que diferencia a rede celular do Wi-Fi.
+
+Nós começamos com a arquitetura da segurança, que é baseada em duas suposições de 
+confiança. Primeiro, cada estação base confia que está conectada ao núcleo móvel 
+por uma rede segura e privada, sobre o qual estabelece os túneis apresentados 
+na :numref:`Figure %s <fig-tunnels>`: um túnel GTP/UDP/IP para o Plano de Usuário 
+do Core (Core-UP) e um túnel SCTP/IP para o Plano de Controle do Core (Core-CP). 
+Segundo, cada UE tem um operador que provê um cartão SIM, o qual contém informação 
+que unicamente identifica exclusivamente o assinante e inclui uma chave secreta 
+que a UE usa para autenticar ela mesma.
+
+O identificador gravado dentro de cada cartão SIM, chamado de IMSI (Indentidade 
+Internacional do Assinante Móvel), é um identificador único  global para cada 
+dispositivo conectado à rede móvel global. Cada IMSI tem  64-bits, autodescritivo, 
+inclui um campo *Formato* que efetivamente serve como uma máscara para extrair 
+outros campos relevantes. Por exemplo, o seguinte é a interpretação que nós 
+assumimos nesse livro (onde IMSIs são comumente representados como um número decimal com 15 dígitos):
+
+* **MCC:** Código de país (número decimal de três dígitos).
+
+* **MNC:** Código de rede móvel (número decimal de três dígitos).
+
+* **ENT:** Código de empresa (número decimal de três dígitos).
+
+* **SUB:** Assinante (número decimal de seis dígitos).
+
+Os primeiros dos campos (*MCC*, *MNC*) são universalmente entendidos 
+para unicamente identificar o MNO, enquanto os dois últimos campos 
+são um exemplo de como o MNO pode usar hierarquia estrutural adicional 
+para unicamente identificar cada dispositivo que ele serve. (Nós estamos 
+trabalhando na direção de entregar a conectividade 5G para empresas, 
+daí o campo *ENT*, mais outros MNOs podem relacionar os últimos 9 
+dígitos usando outra estrutura). O *MCC* e *MNC* tem um papel no 
+roaming: quando a UE tenta conectar em uma rede estrangeira esses 
+campos são usados para encontrar a rede doméstica, onde o resto da IMSI 
+lidera para o perfil do assinante que diz se sim ou não o roaming é 
+habilitado para esse dispositivo. A seguir vamos caminhar pelo que 
+acontece quando um dispositivo conecta com sua rede doméstica, mais 
+informação sobre a ramificação global é dada no final da seção.
+
+
+.. _fig-secure:
+.. figure:: figures/Slide12.png 
+    :width: 600px 
+    :align: center 
+	    
+    Sequência de etapas para estabelecer canais seguros dos planode Controle ee 
+    de usuários.    
+
+Com esse ponto de partida, a :numref:`Figure %s <fig-secure>` mostra 
+a sequência de conexão por-UE. Quando a UE primeiro se tornou ativo, 
+ele se comunica com a estação base mais próxima sobre uma temporária 
+(não autenticada) link de rádio (Passo 1). A estação base próxima encaminha 
+o pedido para o Core-CP sobre o túnel existente, e o Core-CP (assumindo que 
+ele reconhece o IMSI) inicia um protocolo de autenticação com o UE (passo 2). 
+3GPP identifica um conjunto de opções para autenticação e criprografia, onde 
+os protocolos atuais usados são escolha de implementação. Por exemplo, 
+o *Advanced Encryption Standard* (AES) é uma das opções para encriptação. 
+Note que essa troca de autenticamente é inicialmente em texto claroe 
+desde que a estação base para o UE link não é ainda seguro.
+
+Uma vez que o Core-CP e o UE estão satisfeitos com a identidade um do outro, o 
+Core-CP informa aos outros componentes quais parâmetros eles precisarão servir 
+para o UE (Passo 3). Isto inclui: (a) instruir o Core-CP para inicializar o 
+plano de usuário (por exemplo, associando um endereço IP a um UE e configurando 
+o QCI adequado); (b) instruir a estação base para estabelecer um canal 
+criptografado para o UE; e (c) dados que a chave simétrica do UE necessitará 
+utilizar o canal criptografado com o UE (então somente o UE pode decifrar, 
+usando a chave secreta). Completada essa fase, o UE pode usar o 
+canal fim-a-fim do plano de usuário através do Core-UP (Passo 4).
+
+Existem três detalhes adicionais dignos de nota sobre esse processo. 
+Primeiro, o canal de controle seguro entre o UE e o Core-CP configurado 
+durante o passo 2 permanece disponível, e é usado pelo Core-CP para mandar 
+instruções de controle adicionais para a UE durante o curso da sessão. 
+Em outras palavras, ao contrário da Internet, a rede é capaz de “controlar” 
+as configurações de comunicação em dispositivos de ponta.
+
+Segundo, o canal do plano do usuário estabelecido durante o passo 4 é referido como 
+*Default Bearer Service* (Serviço de Portador Padrã)o, mas canais adicionais 
+podem ser estabelecidos entre o UE e Core-UP, cada um com um QCI 
+potencialmente diferente. Isso pode ser feito em uma base de 
+aplicativo a aplicativo, por exemplo, sob o controle do núcleo móvel 
+fazendo *Deep Packet Inspection* (DPI) no tráfego, procurando por 
+fluxos que precisam de tratamento especial.
+
+
+.. _fig-per-hop:
+.. figure:: figures/Slide13.png 
+    :width: 500px 
+    :align: center 
+	    
+    Sequência de túneis por salto envolvidos em um canal de plano do usuário 
+    fim-a-fim.
+
+Na prática, esses túneis por fluxos são geralmente agrupados em um único túnel 
+inter componente, o qual torna impossível diferenciar o nível de serviço 
+fornecido a qualquer canal UE fim-a-fim particular. Isso é a limitação 
+do 4G que o 5G tem a ambição de corrigir como parte do seu suporte ao fatiamento da rede.
+
+Suporte a mobilidade pode agora ser entendido como o processo de re-execução de um ou mais 
+dos passos apresentados na :numref:`Figure %s <fig-secure>`  à medida que o UE se movimenta 
+pela RAN. O link não autenticado indicado por (1) permite que o UE seja conhecido por todas 
+as estações bases dentro do alcance. (Nos referimos a esses *links potenciais* em capítulos 
+futuros.) Baseado no CQC medido do sinal, as estações base se comunicam diretamente umas com 
+as outras para tomar uma decisão de transferênciai (handover). Uma vez tomada, a 
+decisão é então comunicada ao núcleo móvel, reativando as funções de configuração 
+indicadas por (3), a qual reconstrói o túnel de plano do usuário entre a estação base 
+e o Core-UP apresentado na :numref:`Figure %s <fig-per-hop>`. Uma das únicas 
+características da rede de celular é que o  plano de usuário do núcleo móvel 
+armazena  dados durante a transição de transferência, evitando pacotes 
+descartados e subsequentes retransmissões fim-a-fim.
+
+Em outras palavras a rede móvel do celular mantém a seção da UE em face da i
+mobilidade (correspondendo ao canais de controle e de dados representados 
+por (2) e (4) na :numref:`Figure %s <fig-secure>`, respectivamente), 
+mas só é possível para fazer quando o mesmo núcleo móvel serve a UE 
+(i.e., só a estação base muda). Isso iria ser tipicamente o caso de um  
+UE movimentar-se dentro de uma área metropolitana. Movendo entre as áreas 
+metropolitanas - e portanto, entre núcleos móveis - é indistinguível para 
+o ciclo de energia da UE. A UE recebe um novo endereço de IP e nenhuma 
+tentativa é feita para armazenar e subsequente entregar os dados em trânsito. 
+Independente da mobilidade, mas relevante para essa discussão, qualquer UE que 
+fica inativo por um período de tempo também perde sua seção, com uma nova seção 
+estabelecida e com um novo endereço de IP quando a UE se torna ativa novamente.
+
+Note que essa abordagem baseada na seção pode ser rastreada até as 
+raízes da  rede móvel do celular como uma rede orientada a conexão. 
+Um experimento interessante é se o núcleo móvel vai continuar a evoluir 
+para então melhor corresponder às suposições sem conexão dos protocolos 
+da Internet sobre os quais tipicamente ocorrem.
+
+Nós concluímos essa visão geral do núcleo móvel por retornar ao papel 
+que desempenha na implementação da rede móvel *global*. Já está provavelmente 
+claro que cada MNO implementa um base de dados da informação do assinante, 
+permitindo que mapeie um IMSI para um perfil que registra quais serviços 
+(roaming, data plane, hot spot support) o inscrito está pagando para ter. 
+Esse registro também inclui o número de telefone internacional do dispositivo. 
+Como esse banco de dados é realizada é uma escolha de implementação 
+(a qual veremos um exemplo no Capítulo 5), mas 3GPP define a interface 
+pela qual o núcleo móvel ( funcionando/rodando em nome de uma MNO) 
+consulta de outro núcleo móvel (rodando em nome de outra MNO), 
+para mapear entre a IMSI, o número de telefone, e o perfil do assinante.
+
+
+2.5 Serviços de Cloud Gerenciados
+---------------------------------
+
+.. Lifted from OPs book (as a starting point)
+
+.. Needs to describe various deployment options before settling into
+   the enterprise (edge cloud) story that we plan to continue
+   throughout the rest of the book. Main theme is: Orchestration is the
+   final component.
+
+A visão arquitetural apresentada até este ponto tem foco nos elementos 
+da rede móvel celular. Agora nos ateremos a como essas funcionalidade 
+são operacionalizadas, e faremos isso considerando a forma definida 
+por software e nativa nas nuvens (cloud-native). Isto estabelece 
+os fundamentos para o resto deste livro, em que os blocos para a 
+construção de um sistema 5G são serviços nas nuvens. Esta é uma 
+mudança de paradigma para as empresas de telecomunicações, 
+que normalmente compra equipamentos de um fabricante com funções 
+específicas, e que gerenciam a sua utilização usando os sistemas 
+OSS/BSS que foram originalmente projetados para a rede telefônica.\ [#]_
+
+
+.. [#] OSS/BSS significa Sistema de suporte a operação / Sistemas de 
+       Suporte aos negócios (Operation Support System / Business Support 
+       System), e que mesmo as MNOs tradicionais estão os re-imaginando 
+       considerando as práticas nas nuvens. Mas esta transição é lenta 
+       visto que as empresas de telecom precisam continuar suportando 
+       os sistemas legados.
+      
+Quando falamos de “operacionalização” de uma rede, nos referimos a um 
+sistema que as operadoras (sendo elas MNOs tradicionais ou provedores 
+de serviço nas nuvens) usam para ativar e gerenciar todos os componentes 
+que formam o sistema (sendo eles componentes pré-fabricados em software 
+ou hardware). E como os operadores de rede são pessoas, um sumário de 
+alto nível é que a camada de gerenciamento (sendo um OSS/OBS ou um 
+orquestrador de nuvem) provê uma forma de mapear as *intenções* de alto 
+nível em *ações* de baixo nível. 
+ 
+
+.. _fig-intent:
+.. figure:: figures/ops/Slide2.png
+   :width: 300px
+   :align: center
+
+   Sumário de alto nível dos papéis que a operacionalização tem um um ambiente de rede.   
+
+Essa visão geral, conforme ilustrado na :numref:`Figure %s <fig-intent>`, é obviamente um 
+tanto quanto abstrata. Para tornar a discussão mais concreta, nós usamos uma implementação 
+de código aberto, chamada de Aether, como exemplo. Aether é uma nuvem de borda baseada 
+no Kubernetes, aumentada com um serviço de conectividade baseado no 5G. 
+Aether é voltado em empresas que querem aproveitar a conectividade do 5G em suporte 
+de aplicações de ponta que exigem, previsivelmente, baixa latência e conectividade. 
+Em resumo, “baseado em Kubernetes” significa que Aether consegue hospedar serviços 
+baseados em containers, com Kubernetes sendo a plataforma utilizada para orquestrar 
+os serviços, e “conectividade baseado no 5G” significa Aether consegue conectar 
+esses serviços a dispositivos móveis pelo ambiente físico das empresas.
+
+
+Aether oferece suporte a essa combinação por implementar ambos os a RAN e o plano do 
+usuário de núcleo móvel no local (on-prem), como cargas de trabalho nativas das 
+nuvem co-localizadas na cluster da Aether. Isso é geralmente chamado de interrupção 
+local pois ele possibilita uma comunicação direta entre dispositivos móveis e 
+aplicações de ponta sem que o tráfego de dados saia da empresa, em contraste
+o que iria acontecer com o padrão, serviço de 5G fornecido pela operadora. 
+Esse cenário é representado na :numref:`Figure %s <fig-hybrid>`, a qual mostra 
+aplicativos de ponta sem nome em execução no local. Esses aplicativos de 
+ponta podem incluir o processador local de sensor de dados ou aplicações 
+de controle para dispositivos de IoT, por exemplo.
+
+.. _fig-hybrid:
+.. figure:: figures/ops/Slide3.png
+   :width: 700px
+   :align: center
+
+   Visão geral do Aether como uma nuvem híbrida, com apps de ponta 
+   e plano de dados do 5G (chamado de interrupção local) em execução 
+   no local e vários gerenciamentos e controle relacionados a cargas 
+   de trabalho executadas em uma nuvem central.
+
+A abordagem inclui ambas componentes de borda (no local) e centralizadas (fora do local). 
+Isso é verdade para aplicativos de borda, os quais geralmente tem uma contraparte 
+centralizado executando em uma nuvem de commodities. É também verdade para o núcleo 
+móvel do 5G, onde o plano de usuário local (UP) é emparelhado com o plano de controle 
+centralizado (CP). A nuvem central mostrada por essa figura pode ser privada 
+(i.e., operada pela empresa), pública (i.e, operada por um provedor comercial de nuvem), 
+ou alguma combinação das duas (i.e., não todos os elementos centralizados precisam 
+ser executados na mesma nuvem).
+
+Também mostrado na :numref:`Figure %s <fig-hybrid>` está uma plataforma de controle 
+e gerenciamento centralizado. Isso tudo éa versão de Aethers da 
+“Camada de Gerenciamento” representado na :numref:`Figure %s <fig-intent>`, 
+e ele representa toda a funcionalidade que precisa para oferecer o Aether 
+como um serviço de nuvem gerenciado, com os administradores do sistema 
+usando um portal exportado por essa plataforma para operar a 
+infraestrutura e serviços subjacentes em suas empresas.
+
+Uma vez que desconstruirmos os componentes individuais em mais detalhes nos 
+próximos três capítulos, nós retornamos à questão de como o conjunto de 
+componentes resultantes pode ser agregado em uma nuvem de ponta operacional 
+no Capítulo 6. O resultado final é a conectividade do 5G como um serviço de nuvem gerenciado. 
+  
+
+.. Is this the right place to talk about assumed technologies:
+   Kubernetes, Helm, Docker. Could just reproduce 1.3 from the OPs
+   book (Cloud Technology), perhaps in an Appendix.
